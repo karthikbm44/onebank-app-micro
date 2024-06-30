@@ -65,6 +65,7 @@ public class BankStatementServiceImpl implements BankStatementService {
                         transaction.getCheckedIn().toLocalDate().isEqual(toDate))
                 .toList();
 
+
         try {
             designStatement(transactionList,accountNumber);
         } catch (IOException e) {

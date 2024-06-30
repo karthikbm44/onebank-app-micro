@@ -90,7 +90,7 @@ public class TransferServiceImpl implements TransferService {
         userRepository.save(destinationAccountUser);
 
         TransactionRequest destinationTransactionRequest = TransactionRequest.builder()
-                .accountNumber(sourceAccountUser.getAccountNumber())
+                .accountNumber(destinationAccountUser.getAccountNumber())
                 .creditAmount(request.getAmount())
                 .debitAmount(BigDecimal.ZERO)
                 .currentBalance(destinationAccountUser.getAccountBalance().toString())

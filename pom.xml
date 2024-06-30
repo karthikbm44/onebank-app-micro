@@ -12,10 +12,12 @@
     <artifactId>microservice</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+
     <modules>
         <module>oneBank</module>
         <module>transaction</module>
     </modules>
+
     <name>one-bank</name>
     <description>parent project for one bank microservice</description>
 
