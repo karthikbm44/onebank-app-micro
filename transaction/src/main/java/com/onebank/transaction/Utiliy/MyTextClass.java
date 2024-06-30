@@ -16,8 +16,6 @@ import java.io.IOException;
 @NoArgsConstructor
 public class  MyTextClass {
 
-    //demo changes
-
     private  PDDocument document;
 
     private PDPageContentStream contentStream;
