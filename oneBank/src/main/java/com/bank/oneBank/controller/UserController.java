@@ -41,7 +41,7 @@ public class UserController {
             responseCode = "200",
             description = "HTTP Status 200 Success"
     )
-    @GetMapping("/balanceEnquiry")
+    @PostMapping("/balanceEnquiry")
     public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest){
         return userService.balanceEnquiry(enquiryRequest);
     }
