@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.awt.*;
@@ -31,6 +32,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -54,16 +56,24 @@ public class BankStatementServiceImpl implements BankStatementService {
 
     @Override
     public List<Transaction> generateBankStatement(String accountNumber, String fromDateString, String toDateString) {
-        LocalDate fromDate = LocalDate.parse(fromDateString, DateTimeFormatter.ISO_DATE);
-        LocalDate toDate = LocalDate.parse(toDateString, DateTimeFormatter.ISO_DATE);
+        List<Transaction> transactionList = new ArrayList<>();
 
-        List<Transaction> transactionList = transactionRepository.findAll().stream()
-                .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
-                .filter(transaction -> transaction.getCheckedIn().toLocalDate().isEqual(fromDate) ||
-                        (transaction.getCheckedIn().toLocalDate().isAfter(fromDate) &&
-                                transaction.getCheckedIn().toLocalDate().isBefore(toDate)) ||
-                        transaction.getCheckedIn().toLocalDate().isEqual(toDate))
-                .toList();
+        if(!StringUtils.isEmpty(fromDateString) || !StringUtils.isEmpty(toDateString)) {
+            LocalDate  fromDate = LocalDate.parse(fromDateString, DateTimeFormatter.ISO_DATE);
+            LocalDate  toDate = LocalDate.parse(toDateString, DateTimeFormatter.ISO_DATE);
+            transactionList = transactionRepository.findAll().stream()
+                    .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
+                    .filter(transaction -> transaction.getCheckedIn().toLocalDate().isEqual(fromDate) ||
+                            (transaction.getCheckedIn().toLocalDate().isAfter(fromDate) &&
+                                    transaction.getCheckedIn().toLocalDate().isBefore(toDate)) ||
+                            transaction.getCheckedIn().toLocalDate().isEqual(toDate))
+                    .toList();
+        } else {
+            transactionList = transactionRepository.findAll().stream()
+                    .filter(transaction -> transaction.getAccountNumber().equals(accountNumber)).toList();
+        }
+
+
 
 
         try {
