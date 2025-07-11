@@ -23,17 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -56,9 +52,9 @@ public class BankStatementServiceImpl implements BankStatementService {
 
     @Override
     public List<Transaction> generateBankStatement(String accountNumber, String fromDateString, String toDateString) {
-        List<Transaction> transactionList = new ArrayList<>();
+        List<Transaction> transactionList = null;
 
-        if(!StringUtils.isEmpty(fromDateString) || !StringUtils.isEmpty(toDateString)) {
+        if(!StringUtils.isBlank(fromDateString) || !StringUtils.isBlank(toDateString)) {
             LocalDate  fromDate = LocalDate.parse(fromDateString, DateTimeFormatter.ISO_DATE);
             LocalDate  toDate = LocalDate.parse(toDateString, DateTimeFormatter.ISO_DATE);
             transactionList = transactionRepository.findAll().stream()
