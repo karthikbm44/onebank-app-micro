@@ -3,6 +3,7 @@ package com.bank.oneBank.service.impl;
 import com.bank.oneBank.dto.*;
 import com.bank.oneBank.entity.Address;
 import com.bank.oneBank.entity.User;
+import com.bank.oneBank.exception.BusinessExecption;
 import com.bank.oneBank.repository.UserRepository;
 import com.bank.oneBank.service.EmailService;
 import com.bank.oneBank.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -81,11 +83,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BankResponse balanceEnquiry(EnquiryRequest enquiryRequest) {
+    public BankResponse balanceEnquiry(EnquiryRequest enquiryRequest) throws BusinessExecption {
 
         Boolean isAccountExists = userRepository.existsByAccountNumber(enquiryRequest.getAccountNumber());
             if (!isAccountExists) {
-                throw new RuntimeException("User Not Found");
+               throw new BusinessExecption(UUID.randomUUID().toString(),"User Not Found");
             }
         User foundUser = userRepository.findByAccountNumber(enquiryRequest.getAccountNumber());
             return BankResponse.builder()

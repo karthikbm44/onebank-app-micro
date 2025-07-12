@@ -4,6 +4,7 @@ import com.bank.oneBank.dto.BankResponse;
 import com.bank.oneBank.dto.EnquiryRequest;
 import com.bank.oneBank.dto.UserDetailsDto;
 import com.bank.oneBank.dto.UserRequest;
+import com.bank.oneBank.exception.BusinessExecption;
 import com.bank.oneBank.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/user")
@@ -55,8 +58,15 @@ public class UserController {
             )
     })
     @PostMapping("/balanceEnquiry")
-    public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest){
-        return userService.balanceEnquiry(enquiryRequest);
+    public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest) throws Exception {
+        BankResponse response = null;
+        try {
+            response = userService.balanceEnquiry(enquiryRequest);
+        }catch(RuntimeException e){
+          throw new BusinessExecption(UUID.randomUUID().toString(),"Something went wrong while fetching the account balance",e);
+        }
+
+        return response;
     }
 
 
