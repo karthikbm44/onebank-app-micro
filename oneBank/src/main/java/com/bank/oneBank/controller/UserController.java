@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
@@ -58,15 +60,14 @@ public class UserController {
             )
     })
     @PostMapping("/balanceEnquiry")
-    public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest) throws Exception {
+    public ResponseEntity<BankResponse> balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest) throws Exception {
         BankResponse response = null;
         try {
             response = userService.balanceEnquiry(enquiryRequest);
         }catch(RuntimeException e){
           throw new BusinessExecption(UUID.randomUUID().toString(),"Something went wrong while fetching the account balance",e);
         }
-
-        return response;
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
 
