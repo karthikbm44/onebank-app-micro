@@ -6,7 +6,10 @@ import com.bank.oneBank.dto.UserDetailsDto;
 import com.bank.oneBank.dto.UserRequest;
 import com.bank.oneBank.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +40,10 @@ public class UserController {
             summary = "Balance Enquiry",
             description = "Check the account balance using the account number assigned to the user"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status 200 Success"
-    )
+    @ApiResponse(responseCode = "200",
+                    description = "Available Balance",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BankResponse.class)))
     @PostMapping("/balanceEnquiry")
     public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest){
         return userService.balanceEnquiry(enquiryRequest);
