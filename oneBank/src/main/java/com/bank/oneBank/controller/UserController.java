@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -40,10 +41,19 @@ public class UserController {
             summary = "Balance Enquiry",
             description = "Check the account balance using the account number assigned to the user"
     )
-    @ApiResponse(responseCode = "200",
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
                     description = "Available Balance",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankResponse.class)))
+                            schema = @Schema(implementation = BankResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User Not Found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Error.class))
+            )
+    })
     @PostMapping("/balanceEnquiry")
     public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest){
         return userService.balanceEnquiry(enquiryRequest);
