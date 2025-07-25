@@ -6,6 +6,7 @@ import com.bank.oneBank.dto.UserDetailsDto;
 import com.bank.oneBank.dto.UserRequest;
 import com.bank.oneBank.exception.BusinessExecption;
 import com.bank.oneBank.service.UserService;
+import com.bank.oneBank.service.impl.OpenAiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,6 +29,9 @@ public class UserController {
 
     @Autowired
     private UserService  userService;
+
+    @Autowired
+    private OpenAiService openAiService;
 
     @Operation(
             summary = "Create New User Account",
@@ -87,6 +91,11 @@ public class UserController {
     @GetMapping("/userDetails")
     public UserDetailsDto userDetails(@RequestParam String accountNumber){
         return userService.userDetailsRequest(accountNumber);
+    }
+
+    @PostMapping("/suggestion")
+    public String getCodeSuggestions(@RequestBody String prompt){
+        return openAiService.getCodeSuggestions(prompt);
     }
 
 
