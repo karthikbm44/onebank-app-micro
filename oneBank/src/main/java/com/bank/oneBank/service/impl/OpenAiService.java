@@ -48,7 +48,7 @@ public class OpenAiService {
         messages.add(userMessage);
         requestBody.set("messages", messages);
 
-        requestBody.put("max_tokens", 200);
+        requestBody.put("max_tokens", 10000);
         requestBody.put("temperature", 0.7); // Add temperature for better control (optional but recommended)
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), headers);

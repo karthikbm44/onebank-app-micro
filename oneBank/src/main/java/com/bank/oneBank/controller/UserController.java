@@ -106,7 +106,10 @@ public class UserController {
     public ResponseEntity<String> getGithubComments(@PathVariable String owner,
                                                     @PathVariable String repo,
                                                     @PathVariable String pullNumber){
-        return ResponseEntity.ok(gitHubService.listCommentsForPullRequest(owner,repo,pullNumber));
+        String response= null;
+        String reviewComments = gitHubService.listCommentsForPullRequest(owner,repo,pullNumber);
+        response= openAiService.getCodeSuggestions(reviewComments);
+        return ResponseEntity.ok(response);
     }
 
 
