@@ -6,6 +6,7 @@ import com.bank.oneBank.dto.UserDetailsDto;
 import com.bank.oneBank.dto.UserRequest;
 import com.bank.oneBank.exception.BusinessExecption;
 import com.bank.oneBank.service.UserService;
+import com.bank.oneBank.service.impl.GitHubService;
 import com.bank.oneBank.service.impl.OpenAiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     private OpenAiService openAiService;
+
+    @Autowired
+    private GitHubService gitHubService;
 
     @Operation(
             summary = "Create New User Account",
@@ -96,6 +100,13 @@ public class UserController {
     @PostMapping("/suggestion")
     public String getCodeSuggestions(@RequestBody String prompt){
         return openAiService.getCodeSuggestions(prompt);
+    }
+
+    @GetMapping("/{owner}/{repo}/{pullNumber}/suggestion")
+    public ResponseEntity<String> getGithubComments(@PathVariable String owner,
+                                                    @PathVariable String repo,
+                                                    @PathVariable String pullNumber){
+        return ResponseEntity.ok(gitHubService.listCommentsForPullRequest(owner,repo,pullNumber));
     }
 
 
