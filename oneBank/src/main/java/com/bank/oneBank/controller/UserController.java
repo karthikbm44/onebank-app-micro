@@ -68,7 +68,7 @@ public class UserController {
             )
     })
     @PostMapping("/balanceEnquiry")
-    public ResponseEntity<BankResponse> balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest) throws Exception {
+    public ResponseEntity<BankResponse> balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest) throws Exception, BusinessExecption {
         BankResponse response = null;
         try {
             response = userService.balanceEnquiry(enquiryRequest);
